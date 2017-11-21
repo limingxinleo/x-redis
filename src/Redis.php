@@ -40,18 +40,28 @@ class Redis
      * @param int    $db     数据库ID
      * @param int    $port   端口号
      * @param string $uniqid 当相同配置，但是想新开实例时，可以赋值
-     * @return mixed
+     * @return RedisClient
      */
     public static function getInstance($host = '127.0.0.1', $auth = null, $db = 0, $port = 6379, $uniqid = null)
     {
         $key = md5(json_encode([$host, $auth, $db, $port, $uniqid]));
 
-        if (empty(self::$_instance[$key])) {
-            self::$_instance[$key] = static::getClient($host, $port, $auth, $db);
+        if (isset(static::$_instance[$key]) && static::$_instance[$key] instanceof RedisClient) {
+            return static::$_instance[$key];
         }
-        return self::$_instance[$key];
+
+        return static::$_instance[$key] = static::getClient($host, $port, $auth, $db);
     }
 
+    /**
+     * @desc   获取Redis实例
+     * @author limx
+     * @param $host ip地址
+     * @param $port 端口
+     * @param $auth 密码
+     * @param $db   默认DB库
+     * @return RedisClient
+     */
     protected static function getClient($host, $port, $auth, $db)
     {
         $redis = new RedisClient();
@@ -65,6 +75,11 @@ class Redis
         return $redis;
     }
 
+    /**
+     * @desc   返回实例数
+     * @author limx
+     * @return int
+     */
     public static function count()
     {
         return count(static::$_instance);
