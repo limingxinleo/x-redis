@@ -23,14 +23,6 @@ class Redis
      */
     private function __construct($host, $port, $auth, $db)
     {
-        $this->redis = new RedisClient();
-        $this->redis->connect($host, $port);
-        if (!empty($auth)) {
-            $this->redis->auth($auth);
-        }
-        if ($db > 0) {
-            $this->redis->select($db);
-        }
     }
 
     /**
@@ -55,14 +47,22 @@ class Redis
         $key = md5(json_encode([$host, $auth, $db, $port, $uniqid]));
 
         if (empty(self::$_instance[$key])) {
-            self::$_instance[$key] = new self($host, $port, $auth, $db);
+            self::$_instance[$key] = static::getClient($host, $port, $auth, $db);
         }
         return self::$_instance[$key];
     }
 
-    public function __call($name, $arguments)
+    protected static function getClient($host, $port, $auth, $db)
     {
-        return call_user_func_array([$this->redis, $name], $arguments);
+        $redis = new RedisClient();
+        $redis->connect($host, $port);
+        if (!empty($auth)) {
+            $redis->auth($auth);
+        }
+        if ($db > 0) {
+            $redis->select($db);
+        }
+        return $redis;
     }
 
     public static function count()
