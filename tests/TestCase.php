@@ -16,9 +16,16 @@ class TestCase extends UnitTestCase
     protected $key = 'test:test';
     protected $redis;
 
+    protected $host;
+    protected $auth;
+
     public function setUp()
     {
-        $this->redis = Redis::getInstance('127.0.0.1', '910123');
+        $config = include TESTS_PATH . '/_ci/config.php';
+        $this->host = $config['host'];
+        $this->auth = $config['auth'];
+
+        $this->redis = Redis::getInstance($this->host, $this->auth);
         $this->redis->del($this->key);
     }
 }

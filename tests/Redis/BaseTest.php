@@ -39,10 +39,10 @@ class BaseTest extends TestCase
     public function testCount()
     {
         // $this->redis new 1
-        $redis = Redis::getInstance('127.0.0.1', '910123', 0, 6379); // old 1
-        $redis = Redis::getInstance('127.0.0.1', '910123', 0, 6379, 1); // new 2
-        $redis = Redis::getInstance('127.0.0.1', '910123', 1, 6379, 1); // new 3
-        $redis = Redis::getInstance('127.0.0.1', '910123', 1, 6379, 1); // old 3
+        $redis = Redis::getInstance($this->host, $this->auth, 0, 6379); // old 1
+        $redis = Redis::getInstance($this->host, $this->auth, 0, 6379, 1); // new 2
+        $redis = Redis::getInstance($this->host, $this->auth, 1, 6379, 1); // new 3
+        $redis = Redis::getInstance($this->host, $this->auth, 1, 6379, 1); // old 3
 
         $this->assertEquals(3, Redis::count());
     }
