@@ -11,7 +11,7 @@ namespace Xin\Redis\Commands;
 use Xin\Redis\RedisCommand;
 
 /**
- * IncrBy的同时增加超时时间设定
+ * IncrBy 当KEY不存在时增加超时时间设定
  * Class IncrWithExpireTimeCommand
  * @package Xin\Redis\Commands
  */
