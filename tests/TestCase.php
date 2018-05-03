@@ -14,6 +14,7 @@ use Xin\Redis;
 class TestCase extends UnitTestCase
 {
     protected $key = 'test:test';
+    /** @var \Redis */
     protected $redis;
 
     protected $host;
